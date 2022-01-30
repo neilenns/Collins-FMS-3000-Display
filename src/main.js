@@ -1,10 +1,69 @@
 const { app, BrowserWindow } = require('electron');
-const path = require('path');
+const network = require('network');
+const WebSocket = require('ws');
+
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   // eslint-disable-line global-require
   app.quit();
+}
+
+let websocketPort = 8081;
+
+const startSockets = () => {
+  network.get_private_ip((err, ip) => {
+    // Create websocket server
+    let wss = null;
+
+    wss = new WebSocket.Server({ port: websocketPort }, () => {
+        console.clear();
+        console.log('External MCDU server started.\n');
+        console.log('Waiting for simulator...');
+    });
+
+    wss.on('error', (err) => {
+        console.error(`${err}`);
+        setTimeout(() => {
+        }, 5000);
+    });
+
+    wss.on('connection', (ws) => {
+        let isMcdu = false;
+        ws.on('message', (message) => {
+            message = message.toString();
+            if (message === 'mcduConnected') {
+                console.clear();
+                console.log('\x1b[32mSimulator connected!\x1b[0m\n');
+                if (err) {
+                    console.log(`To control the MCDU from this device, open \x1b[47m\x1b[30mhttp://localhost:${httpPort}\x1b[0m in your browser.`);
+                    console.log('\nTo control the MCDU from another device on your network, replace localhost with your local IP address.');
+                    // eslint-disable-next-line max-len
+                    console.log('To find your local IP address, see here: \x1b[47m\x1b[30mhttps://support.microsoft.com/en-us/windows/find-your-ip-address-in-windows-f21a9bbc-c582-55cd-35e0-73431160a1b9\x1b[0m');
+                } else {
+                    console.log(`To control the MCDU from another device on your network, open \x1b[47m\x1b[30mhttp://${ip}:${httpPort}\x1b[0m in your browser.`);
+                    console.log(`To control the MCDU from this device, open \x1b[47m\x1b[30mhttp://localhost:${httpPort}\x1b[0m in your browser.`);
+                }
+                isMcdu = true;
+                return;
+            }
+            wss.clients.forEach((client) => {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(message);
+                }
+            });
+            if (debug) {
+                console.log(message);
+            }
+        });
+        ws.on('close', () => {
+            if (isMcdu) {
+                console.clear();
+                console.log('\x1b[31mLost connection to simulator.\x1b[0m\n\nWaiting for simulator...');
+            }
+        });
+    });
+});
 }
 
 const createWindow = () => {
@@ -19,6 +78,8 @@ const createWindow = () => {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+
+  startSockets();
 };
 
 // This method will be called when Electron has finished
