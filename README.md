@@ -18,8 +18,7 @@ dementedmonkey and copy the `z-dementedmonkey-cj4-mcdu` folder to your Flight Si
 3. Download and run the installer for this app from the [releases page](https://github.com/neilenns/Collins-FMS-3000-Display/releases).
 4. Run Microsoft Flight Simulator and start a flight with the CJ4.
 
-Once the plane has loaded and you're on a runway the app should update to display the screen. Use the `F11`
-key on your keyboard to toggle full screen display.
+Once the plane has loaded the app should update to display the screen. Use the `F11` key on your keyboard to toggle full screen display.
 
 ![Screenshot of the CJ4 display from the app](https://user-images.githubusercontent.com/9524118/151887395-61e5a817-a16b-4c44-a256-43476f0d7cac.png)
 
