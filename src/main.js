@@ -56,16 +56,17 @@ const startSockets = () => {
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    removeMenu: true,
     width: 800,
     height: 600,
   });
+  
+  mainWindow.removeMenu();
   
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
   
   startSockets();
 };
