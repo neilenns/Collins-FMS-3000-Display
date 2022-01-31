@@ -19,6 +19,7 @@
 }
 
 .normal .App {
+  background-image: url("~static/mcdu-cj4.png");
   background-size: contain;
   background-repeat: no-repeat;
 }

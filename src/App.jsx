@@ -64,7 +64,22 @@ function App() {
         <div className={fullscreen ? 'fullscreen' : 'normal'}>
             <div className="App">
                 <WebsocketContext.Provider value={{ sendMessage, lastMessage, readyState }}>
-                    <McduScreen content={content} />
+                    {!fullscreen && (
+                        <>
+                            <McduScreen content={content} />
+                            <McduButtons />
+                            <div className="button-grid" style={{ left: `${200 / 14.00}%`, top: `${128 / 16.50}%`, width: `${980 / 14.00}%`, height: `${80 / 16.50}%` }}>
+                                <div className="button-row">
+                                    <div className="button" title="Fullscreen" onClick={() => setFullscreen(!fullscreen)} />
+                                </div>
+                            </div>
+                        </>
+                    )}
+                    {fullscreen && (
+                        <div title="Exit fullscreen" onClick={() => setFullscreen(false)}>
+                            <McduScreen content={content} />
+                        </div>
+                    )}
                 </WebsocketContext.Provider>
             </div>
         </div>

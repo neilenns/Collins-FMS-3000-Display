@@ -35,15 +35,6 @@ const startSockets = () => {
             if (message === 'mcduConnected') {
                 console.clear();
                 console.log('\x1b[32mSimulator connected!\x1b[0m\n');
-                if (err) {
-                    console.log(`To control the MCDU from this device, open \x1b[47m\x1b[30mhttp://localhost:${httpPort}\x1b[0m in your browser.`);
-                    console.log('\nTo control the MCDU from another device on your network, replace localhost with your local IP address.');
-                    // eslint-disable-next-line max-len
-                    console.log('To find your local IP address, see here: \x1b[47m\x1b[30mhttps://support.microsoft.com/en-us/windows/find-your-ip-address-in-windows-f21a9bbc-c582-55cd-35e0-73431160a1b9\x1b[0m');
-                } else {
-                    console.log(`To control the MCDU from another device on your network, open \x1b[47m\x1b[30mhttp://${ip}:${httpPort}\x1b[0m in your browser.`);
-                    console.log(`To control the MCDU from this device, open \x1b[47m\x1b[30mhttp://localhost:${httpPort}\x1b[0m in your browser.`);
-                }
                 isMcdu = true;
                 return;
             }
@@ -52,9 +43,6 @@ const startSockets = () => {
                     client.send(message);
                 }
             });
-            if (debug) {
-                console.log(message);
-            }
         });
         ws.on('close', () => {
             if (isMcdu) {

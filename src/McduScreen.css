@@ -1,3 +1,17 @@
+@font-face {
+  font-family: "Collins ProLine";
+  src: url("~static/CollinsProLine-Condensed.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Collins ProLine Regular";
+  src: url("~static/CollinsProLine-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 .screen {
   --displayBackground: rgba(13, 20, 35, 1);
   --displaySeparator: #3c3c3c;

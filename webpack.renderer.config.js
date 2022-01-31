@@ -1,4 +1,5 @@
 const rules = require('./webpack.rules');
+const path = require("path");
 
 rules.push({
   test: /\.css$/,
@@ -10,4 +11,11 @@ module.exports = {
   module: {
     rules,
   },
+  resolve: {
+    alias: {
+      // for accessing static folder from inside stylesheets
+      // This nonsense comes from https://github.com/loopmode/electron-webpack-static-examples
+      static: path.resolve(__dirname, "static"),
+    },
+  }
 };
