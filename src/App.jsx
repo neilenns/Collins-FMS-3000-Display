@@ -2,7 +2,6 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { McduScreen } from './McduScreen.jsx';
-import { McduButtons } from './McduButtons.jsx';
 import { WebsocketContext } from './WebsocketContext.jsx';
 
 function App() {
@@ -59,9 +58,14 @@ function App() {
             }
         }
     }, [lastMessage]);
+    
+    function handleFullScreen(e) {
+        console.log("hello from handlefullscreen");
+        BrowserWindow.getCurrentWindow().setFullscreen();
+    }
 
     return (
-        <div className="fullscreen">
+        <div className="fullscreen" onClick={handleFullScreen}>
             <div className="App">
                 <WebsocketContext.Provider value={{ sendMessage, lastMessage, readyState }}>
                     <McduScreen content={content} />
