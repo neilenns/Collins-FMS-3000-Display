@@ -83,15 +83,15 @@ const createWindow = () => {
       nodeIntegration: true,
     }
   });
-  
-  // mainWindow.removeMenu();
-  
+    
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
-  
+  // Assume the unpackaged app is being used for dev work and show the dev tools.
+  if (!app.isPackaged) {
+    mainWindow.webContents.openDevTools();
+  }
+
   mainWindow.on('enter-full-screen', () => { mainWindow.setMenuBarVisibility(false); });
   mainWindow.on('leave-full-screen', () => { mainWindow.setMenuBarVisibility(true); });
 
