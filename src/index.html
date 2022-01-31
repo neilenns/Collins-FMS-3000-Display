@@ -5,6 +5,18 @@
     <title>CJ4</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <script>
+        // Workaround for a webkit "feature" where 100vh is not actually 100vh
+        function appHeight() {
+          const doc = document.documentElement;
+          doc.style.setProperty("--vh", window.innerHeight + "px");
+        }
+
+        window.addEventListener("resize", appHeight);
+        setInterval(appHeight, 100);
+        appHeight();
+      </script>
+    </div>
   </body>
 </html>

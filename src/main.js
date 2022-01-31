@@ -18,7 +18,6 @@ const startSockets = () => {
 
     wss = new WebSocket.Server({ port: websocketPort }, () => {
         console.clear();
-        console.log('External MCDU server started.\n');
         console.log('Waiting for simulator...');
     });
 
@@ -66,7 +65,7 @@ const createWindow = () => {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
-
+  
   startSockets();
 };
 
