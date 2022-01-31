@@ -2,6 +2,12 @@ import { app, BrowserWindow, Menu, MenuItem } from 'electron';
 import { get_private_ip } from 'network';
 import { Server, OPEN } from 'ws';
 
+// Handle creating/removing shortcuts on Windows when installing/uninstalling.
+if (require('electron-squirrel-startup')) {
+  // eslint-disable-line global-require
+  app.quit();
+}
+
 const menuTemplate = [
   {
     label: 'File',
@@ -23,12 +29,6 @@ const menuTemplate = [
 
 const menu = Menu.buildFromTemplate(menuTemplate)
 Menu.setApplicationMenu(menu)
-
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) {
-  // eslint-disable-line global-require
-  app.quit();
-}
 
 let websocketPort = 8081;
 
