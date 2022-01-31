@@ -1,7 +1,28 @@
-const { app, BrowserWindow } = require('electron');
-const network = require('network');
-const WebSocket = require('ws');
+import { app, BrowserWindow, Menu, MenuItem } from 'electron';
+import { get_private_ip } from 'network';
+import { Server, OPEN } from 'ws';
 
+const menuTemplate = [
+  {
+    label: 'File',
+    submenu: [
+      {
+        role: 'quit'
+      }
+    ]    
+  },
+  {
+    label: 'View',
+    submenu: [
+      {
+        role: 'togglefullscreen'
+      }
+    ]
+  }
+]
+
+const menu = Menu.buildFromTemplate(menuTemplate)
+Menu.setApplicationMenu(menu)
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -12,11 +33,11 @@ if (require('electron-squirrel-startup')) {
 let websocketPort = 8081;
 
 const startSockets = () => {
-  network.get_private_ip((err, ip) => {
+  get_private_ip((err, ip) => {
     // Create websocket server
     let wss = null;
 
-    wss = new WebSocket.Server({ port: websocketPort }, () => {
+    wss = new Server({ port: websocketPort }, () => {
         console.clear();
         console.log('Waiting for simulator...');
     });
@@ -38,7 +59,7 @@ const startSockets = () => {
                 return;
             }
             wss.clients.forEach((client) => {
-                if (client.readyState === WebSocket.OPEN) {
+                if (client.readyState === OPEN) {
                     client.send(message);
                 }
             });
@@ -57,10 +78,13 @@ const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
-    height: 600
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+    }
   });
   
-  mainWindow.removeMenu();
+  // mainWindow.removeMenu();
   
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
@@ -68,6 +92,9 @@ const createWindow = () => {
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
   
+  mainWindow.on('enter-full-screen', () => { mainWindow.setMenuBarVisibility(false); });
+  mainWindow.on('leave-full-screen', () => { mainWindow.setMenuBarVisibility(true); });
+
   startSockets();
 };
 

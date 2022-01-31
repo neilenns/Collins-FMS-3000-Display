@@ -59,13 +59,8 @@ function App() {
         }
     }, [lastMessage]);
     
-    function handleFullScreen(e) {
-        console.log("hello from handlefullscreen");
-        BrowserWindow.getCurrentWindow().setFullscreen();
-    }
-
     return (
-        <div className="fullscreen" onClick={handleFullScreen}>
+        <div className="fullscreen">
             <div className="App">
                 <WebsocketContext.Provider value={{ sendMessage, lastMessage, readyState }}>
                     <McduScreen content={content} />
