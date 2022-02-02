@@ -67,6 +67,8 @@
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
+    "electron-store": "^8.0.1",
+    "electron-win-state": "^1.1.22",
     "network": "^0.6.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
