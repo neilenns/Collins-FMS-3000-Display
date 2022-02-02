@@ -14,6 +14,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Extract build version
+        id: get_version
+        uses: battila7/get-version-action@v2
+
+      - name: Set package.json version
+        id: package_version
+        uses: KageKirin/set-node-package-version@v0
+        with:
+          version: ${{ steps.get_version.outputs.version-without-v }}
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
