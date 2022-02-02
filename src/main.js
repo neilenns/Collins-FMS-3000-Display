@@ -1,12 +1,16 @@
 import { app, BrowserWindow, Menu, MenuItem } from 'electron';
 import { get_private_ip } from 'network';
 import { Server, OPEN } from 'ws';
+import WinState from 'electron-win-state'
+import * as Store from 'electron-store';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   // eslint-disable-line global-require
   app.quit();
 }
+
+const store = new Store();
 
 const menuTemplate = [
   {
@@ -76,13 +80,21 @@ const startSockets = () => {
 
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  const mainWindow = WinState.createBrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
       nodeIntegration: true,
-    }
+    },
+    // The window is hidden by default so it can be set full screen if necessary before displaying.
+    show: false
   });
+
+  // The electron-win-state package doesn't remember full screen state by default
+  // so take care of that by reading a saved value from the store.
+  mainWindow.setFullScreen(store.get('fullScreen'));
+  mainWindow.setMenuBarVisibility(!store.get('fullScreen'));
+  mainWindow.show();
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
@@ -92,8 +104,10 @@ const createWindow = () => {
     mainWindow.webContents.openDevTools();
   }
 
-  mainWindow.on('enter-full-screen', () => { mainWindow.setMenuBarVisibility(false); });
-  mainWindow.on('leave-full-screen', () => { mainWindow.setMenuBarVisibility(true); });
+  // When the app goes into and out of full screen the menu bar visibility gets set and full screen state is
+  // is saved so it can be restored on future runs. 
+  mainWindow.on('enter-full-screen', () => { mainWindow.setMenuBarVisibility(false); store.set('fullScreen', true); });
+  mainWindow.on('leave-full-screen', () => { mainWindow.setMenuBarVisibility(true); store.set('fullScreen', false); });
 
   startSockets();
 };
