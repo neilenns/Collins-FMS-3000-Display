@@ -15,7 +15,7 @@ const menuTemplate = [
       {
         role: 'quit'
       }
-    ]    
+    ]
   },
   {
     label: 'View',
@@ -30,7 +30,7 @@ const menuTemplate = [
 const menu = Menu.buildFromTemplate(menuTemplate)
 Menu.setApplicationMenu(menu)
 
-let websocketPort = 8081;
+let websocketPort = 8086;
 
 const startSockets = () => {
   get_private_ip((err, ip) => {
@@ -38,40 +38,40 @@ const startSockets = () => {
     let wss = null;
 
     wss = new Server({ port: websocketPort }, () => {
-        console.clear();
-        console.log('Waiting for simulator...');
+      console.clear();
+      console.log('Waiting for simulator...');
     });
 
     wss.on('error', (err) => {
-        console.error(`${err}`);
-        setTimeout(() => {
-        }, 5000);
+      console.error(`${err}`);
+      setTimeout(() => {
+      }, 5000);
     });
 
     wss.on('connection', (ws) => {
-        let isMcdu = false;
-        ws.on('message', (message) => {
-            message = message.toString();
-            if (message === 'mcduConnected') {
-                console.clear();
-                console.log('\x1b[32mSimulator connected!\x1b[0m\n');
-                isMcdu = true;
-                return;
-            }
-            wss.clients.forEach((client) => {
-                if (client.readyState === OPEN) {
-                    client.send(message);
-                }
-            });
+      let isMcdu = false;
+      ws.on('message', (message) => {
+        message = message.toString();
+        if (message === 'mcduConnected') {
+          console.clear();
+          console.log('\x1b[32mSimulator connected!\x1b[0m\n');
+          isMcdu = true;
+          return;
+        }
+        wss.clients.forEach((client) => {
+          if (client.readyState === OPEN) {
+            client.send(message);
+          }
         });
-        ws.on('close', () => {
-            if (isMcdu) {
-                console.clear();
-                console.log('\x1b[31mLost connection to simulator.\x1b[0m\n\nWaiting for simulator...');
-            }
-        });
+      });
+      ws.on('close', () => {
+        if (isMcdu) {
+          console.clear();
+          console.log('\x1b[31mLost connection to simulator.\x1b[0m\n\nWaiting for simulator...');
+        }
+      });
     });
-});
+  });
 }
 
 const createWindow = () => {
@@ -83,7 +83,7 @@ const createWindow = () => {
       nodeIntegration: true,
     }
   });
-    
+
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
