@@ -8,10 +8,6 @@ jobs:
   build:
     runs-on: windows-2022
 
-    strategy:
-      matrix:
-        node-version: [14.x]
-
     steps:
       - uses: actions/checkout@v2
 
@@ -25,13 +21,20 @@ jobs:
         with:
           version: ${{ steps.get_version.outputs.version-without-v }}
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 14.x
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 14.x
           cache: "npm"
+
       - run: npm ci
+
       - run: npm run make -- --platform win32 --arch x64
+
+      - name: Commit new version
+        run: |
+          git commit -am "CI: update version from tag"
+          git push https://${{ github.token }}@github.com/neilenns/Collins-FMS-3000-Display
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
