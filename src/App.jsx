@@ -1,4 +1,4 @@
-8088import './App.css';
+import './App.css';
 import React, { useState, useEffect } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { McduScreen } from './McduScreen.jsx';
