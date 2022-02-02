@@ -30,7 +30,7 @@ const menuTemplate = [
 const menu = Menu.buildFromTemplate(menuTemplate)
 Menu.setApplicationMenu(menu)
 
-let websocketPort = 8086;
+let websocketPort = 8088;
 
 const startSockets = () => {
   get_private_ip((err, ip) => {
