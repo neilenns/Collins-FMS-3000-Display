@@ -1,7 +1,7 @@
 {
   "name": "collins-fms-3000-display",
   "productName": "Collins FMS 3000 display",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "External display of the Collins FMS 3000 from the Citation CJ4 in Microsoft Flight Simulator 2020.",
   "main": ".webpack/main",
   "scripts": {
@@ -14,7 +14,7 @@
   "keywords": [],
   "author": {
     "name": "Neil Enns",
-    "email": "{ID}+{username}@users.noreply.github.com"
+    "email": "neile@live.com"
   },
   "license": "MIT",
   "config": {
