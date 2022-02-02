@@ -6,7 +6,7 @@ import { WebsocketContext } from './WebsocketContext.jsx';
 
 function App() {
     const [fullscreen, setFullscreen] = useState(window.location.href.endsWith('fullscreen'));
-    const socketUrl = `ws://localhost:8081`;
+    const socketUrl = `ws://localhost:8086`;
 
     const [content, setContent] = useState(
         {
@@ -25,7 +25,7 @@ function App() {
                 ['', '', ''],
             ],
             scratchpad: '',
-            message:'',
+            message: '',
             title: '',
             titleLeft: '',
             page: '',
@@ -58,7 +58,7 @@ function App() {
             }
         }
     }, [lastMessage]);
-    
+
     return (
         <div className="fullscreen">
             <div className="App">
