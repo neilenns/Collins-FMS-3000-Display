@@ -31,13 +31,6 @@ jobs:
 
       - run: npm run make -- --platform win32 --arch x64
 
-      - name: Commit new version
-        run: |
-          git config --global user.name "GitHub Automation"
-          git config --global user.email "automation@noemail.com"
-          git commit package.json -m "CI: update version from tag"
-          git push https://${{ github.token }}@github.com/neilenns/Collins-FMS-3000-Display
-
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
         with:
