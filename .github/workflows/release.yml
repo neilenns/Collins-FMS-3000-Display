@@ -31,16 +31,12 @@ jobs:
 
       - run: npm run make -- --platform win32 --arch x64
 
-      - name: push
-        uses: github-actions-x/commit@v2.8
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          push-branch: "master"
-          commit-message: "CI: update package.json version from tag"
-          force-add: "true"
-          files: package.json
-          name: GitHub automation
-          email: neile@live.com
+      - name: Commit new version
+        run: |
+          git config --global user.name "GitHub Automation"
+          git config --global user.email "automation@noemail.com"
+          git commit package.json -m "CI: update version from tag"
+          git push https://${{ github.token }}@github.com/neilenns/Collins-FMS-3000-Display
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
