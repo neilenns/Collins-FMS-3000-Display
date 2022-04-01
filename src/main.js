@@ -12,6 +12,32 @@ if (require('electron-squirrel-startup')) {
 
 const store = new Store();
 
+const blankScreen = {
+  lines: [
+      ['', '', ''],
+      ['', '', ''],
+      ['', '', ''],
+      ['', '', ''],
+      ['', '', ''],
+      ['', '', ''],
+      ['', '', ''],
+      ['', '', ''],
+      ['', '', ''],
+      ['', '', ''],
+      ['', '', ''],
+      ['', '', ''],
+  ],
+  scratchpad: '',
+  message: '',
+  title: '',
+  titleLeft: '',
+  page: '',
+  exec: false,
+  power: false,
+};
+
+const powerOffMessage = "update:" + JSON.stringify({ left: blankScreen, right: blankScreen });
+
 const menuTemplate = [
   {
     label: 'File',
@@ -70,6 +96,11 @@ const startSockets = () => {
       });
       ws.on('close', () => {
         if (isMcdu) {
+          wss.clients.forEach((client) => {
+            if (client.readyState === OPEN) {
+                client.send(powerOffMessage);
+            }
+          });
           console.clear();
           console.log('\x1b[31mLost connection to simulator.\x1b[0m\n\nWaiting for simulator...');
         }

@@ -12,7 +12,7 @@ project possible.
 
 To make this work:
 
-1. Install the WorkingTitle CJ4 mod, [version 0.12.11 or greater](https://www.workingtitle.aero/packages/cj4/2021/12/07/cj4-release-v0.12.11.html).
+1. Install the WorkingTitle CJ4 mod, [version 0.12.12 or greater](https://www.workingtitle.aero/packages/cj4/2021/12/07/cj4-release-v0.12.11.html).
 2. Download the latest [CJ4 MCDU release](https://github.com/dementedmonkey/cj4-mcdu/releases) from
 dementedmonkey and copy the `z-dementedmonkey-cj4-mcdu` folder to your Flight Simulator `community` folder.
 3. Download and run the installer for this app from the [releases page](https://github.com/neilenns/Collins-FMS-3000-Display/releases).
