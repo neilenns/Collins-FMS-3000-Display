@@ -123,7 +123,14 @@ const createWindow = (index) => {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      // This method of passing a parameter to the render process comes from
+      // https://stackoverflow.com/questions/38335004/how-to-pass-parameters-from-main-process-to-render-processes-in-electron.
+      // The queryparam method didn't work in the release version of the application due to
+      // security policy preventing the url from opening.
+      // additionalArguments expects an array of strings hence the funky wrapping of index.
+      additionalArguments: [`${index}`],
+      contextIsolation: false,
     },
     // The window is hidden by default so it can be set full screen if necessary before displaying.
     show: false
@@ -135,10 +142,11 @@ const createWindow = (index) => {
   // so take care of that by reading a saved value from the store.
   window.setFullScreen(store.get('fullScreen'));
   window.setMenuBarVisibility(!store.get('fullScreen'));
+  
   window.show();
 
   // and load the index.html of the app.
-  window.loadURL(`${MAIN_WINDOW_WEBPACK_ENTRY}/?screen=${index}`);
+  window.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   // Assume the unpackaged app is being used for dev work and show the dev tools.
   if (!app.isPackaged) {
