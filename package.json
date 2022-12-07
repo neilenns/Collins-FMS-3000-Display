@@ -1,7 +1,7 @@
 {
   "name": "collins-fms-3000-display",
   "productName": "Collins FMS 3000 display",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "External display of the Collins FMS 3000 from the Citation CJ4 in Microsoft Flight Simulator 2020.",
   "main": ".webpack/main",
   "scripts": {
