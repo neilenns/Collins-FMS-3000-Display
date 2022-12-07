@@ -12,8 +12,6 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-const store = new Store();
-
 const blankScreen = {
   lines: [
       ['', '', ''],
@@ -118,10 +116,19 @@ const createWindows = () => {
 }
 
 const createWindow = (index) => {
+  // Each window saves its settings in a separate store so window position is
+  // maintained independently.
+  const store = new Store({
+    name: `window${index}-config`
+  });
+
   // Create the browser window.
   var window = WinState.createBrowserWindow({
     width: 800,
     height: 600,
+    winState: {
+      store: store
+    },
     webPreferences: {
       nodeIntegration: true,
       // This method of passing a parameter to the render process comes from
@@ -160,14 +167,12 @@ const createWindow = (index) => {
   
   // Handle closing windows.
   window.on('closed', () => { windows.delete(window); window = null; });
-
-  startSockets();
 };
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindows);
+app.on('ready', () => { createWindows(); startSockets(); } );
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
