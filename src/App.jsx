@@ -3,12 +3,9 @@ import React, { useState, useEffect } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { McduScreen } from './McduScreen.jsx';
 import { WebsocketContext } from './WebsocketContext.jsx';
-import querystring from 'query-string';
 
 function App() {
-    var query = querystring.parse(global.location.search);
-    let requestedId = query.screen;
-
+    const requestedId = window.process.argv[window.process.argv.length - 2];
     const [fullscreen, setFullscreen] = useState(window.location.href.endsWith('fullscreen'));
     const [screenId, setScreenId] = useState(requestedId);
 
