@@ -111,11 +111,11 @@ const startSockets = () => {
 
 // Information on creating mulitple windows comes from https://spin.atomicobject.com/2021/07/08/multiple-windows-electron-app/.
 const createWindows = () => {
-  createWindow(1);
-  createWindow(2);
+  createWindow(1, "Collins FMS 3000: Pilot");
+  createWindow(2, "Collins FMS 3000: Co-pilot");
 }
 
-const createWindow = (index) => {
+const createWindow = (index, title) => {
   // Each window saves its settings in a separate store so window position is
   // maintained independently.
   const store = new Store({
@@ -126,6 +126,7 @@ const createWindow = (index) => {
   var window = WinState.createBrowserWindow({
     width: 800,
     height: 600,
+    title: title,
     winState: {
       store: store
     },
