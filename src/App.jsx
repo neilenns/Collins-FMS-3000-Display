@@ -5,6 +5,7 @@ import { McduScreen } from './McduScreen.jsx';
 import { WebsocketContext } from './WebsocketContext.jsx';
 
 function App() {
+    const prefix = "update:cj4:";
     const requestedId = window.process.argv[window.process.argv.length - 2];
     const [fullscreen, setFullscreen] = useState(window.location.href.endsWith('fullscreen'));
     const [screenId, setScreenId] = useState(requestedId);
@@ -52,8 +53,8 @@ function App() {
     useEffect(() => {
         if (lastMessage != null) {
             const messageType = lastMessage.data.split(':')[0];
-            if (messageType === 'update') {
-                const jsonIn = JSON.parse(lastMessage.data.substring(lastMessage.data.indexOf(':') + 1));
+            if (lastMessage.data.startsWith(prefix)) {
+                const jsonIn = JSON.parse(lastMessage.data.substring(prefix.length));
                 const screenName = screenId == 2 ? 'right' : 'left';
                 const newContent = jsonIn[screenName];
                 if (newContent) {
