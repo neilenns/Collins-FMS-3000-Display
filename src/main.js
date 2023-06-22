@@ -1,10 +1,38 @@
-import { app, BrowserWindow, Menu, MenuItem } from 'electron';
+import { app, BrowserWindow, Menu } from 'electron';
 import { get_private_ip } from 'network';
 import { Server, OPEN } from 'ws';
 import WinState from 'electron-win-state'
 import * as Store from 'electron-store';
+import { screen } from 'electron';
 
 var windows = new Set();
+
+const resetWindows = () => {
+  console.log("Resetting window positions");
+
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+
+  let xOffset = 0;
+  let yOffset = 0;
+
+  windows.forEach((win) => {
+    // For some reason just using the win object had cases where the window size wouldn't change for
+    // the non-active window. ChatGPT suggested this fix and it seems to work, although I have no idea
+    // why it would be any different than just using the win object.
+    const targetWindow = BrowserWindow.fromId(win.id);
+
+    targetWindow.setFullScreen(false);
+    targetWindow.setSize(800, 600);
+
+    const x = Math.floor((width - win.getSize()[0]) / 2) + xOffset;
+    const y = Math.floor((height - win.getSize()[1]) / 2) + yOffset;
+
+    targetWindow.setPosition(x, y);
+
+    xOffset += 20;
+    yOffset += 20;
+  });
+}
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -50,6 +78,11 @@ const menuTemplate = [
   {
     label: 'View',
     submenu: [
+      {
+        label: 'Reset windows',
+        click: resetWindows,
+        accelerator: 'F10'
+      },
       {
         role: 'togglefullscreen'
       }
@@ -148,6 +181,7 @@ const createWindow = (index, title) => {
 
   // The electron-win-state package doesn't remember full screen state by default
   // so take care of that by reading a saved value from the store.
+  var lastFullScreen = store.get('fullScreen');
   window.setFullScreen(store.get('fullScreen'));
   window.setMenuBarVisibility(!store.get('fullScreen'));
   
@@ -164,7 +198,8 @@ const createWindow = (index, title) => {
   // When the app goes into and out of full screen the menu bar visibility gets set and full screen state is
   // is saved so it can be restored on future runs. 
   window.on('enter-full-screen', () => { window.setMenuBarVisibility(false); store.set('fullScreen', true); });
-  window.on('leave-full-screen', () => { window.setMenuBarVisibility(true); store.set('fullScreen', false); });
+  window.on('leave-full-screen', () => { 
+    window.setMenuBarVisibility(true); store.set('fullScreen', false); });
   
   // Handle closing windows.
   window.on('closed', () => { windows.delete(window); window = null; });
@@ -185,6 +220,7 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
+
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
