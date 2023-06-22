@@ -7,6 +7,9 @@ import { screen } from 'electron';
 
 var windows = new Set();
 
+// Moves all the app windows to the main display, turns off full screen mode,
+// resets their size to 800x600, and centers them on the screen offset by
+// 20 pixels each.
 const resetWindows = () => {
   console.log("Resetting window positions");
 
